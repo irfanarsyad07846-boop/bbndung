@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jelajah Kota Bandung - Slide Presentation & Interactive Quiz 💙🌿</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #002b66;
+            background-image: radial-gradient(#004099 2px, transparent 2px);
+            background-size: 24px 24px;
+            color: #111111;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .presentation-container {
+            width: 100%;
+            max-width: 800px;
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .slide {
+            display: none;
+            width: 100%;
+            background: #ffffff;
+            border: 4px solid #000000;
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 8px 8px 0px #000000;
+            animation: fadeIn 0.3s ease-in-out;
+            position: relative;
+        }
+
+        .slide.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HEADER BOX & PERSIB LOGO */
+        .header-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0044cc;
+            color: #ffffff;
+            padding: 12px 20px;
+            border: 3px solid #000000;
+            border-radius: 14px;
+            box-shadow: 4px 4px 0px #000000;
+            margin-bottom: 20px;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: 900;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .persib-logo-container {
+            width: 44px;
+            height: 52px;
+            background: #ffffff;
+            border: 2px solid #000000;
+            border-radius: 6px 6px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 2px 2px 0px #000000;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .persib-stars {
+            font-size: 8px;
+            color: #ffcc00;
+            line-height: 1;
+            margin-top: 2px;
+        }
+
+        .persib-shield {
+            width: 26px;
+            height: 28px;
+            background: linear-gradient(135deg, #0044cc 50%, #ffcc00 50%);
+            border: 1.5px solid #000000;
+            border-radius: 2px 2px 10px 10px;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .persib-text {
+            font-size: 6px;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 1px 1px 0px #000;
+        }
+
+        .slide-badge {
+            background: #ffcc00;
+            color: #000000;
+            display: inline-block;
+            padding: 5px 14px;
+            border: 2.5px solid #000000;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.85rem;
+            box-shadow: 3px 3px 0px #000000;
+            margin-bottom: 16px;
+        }
+
+        .slide-body {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #002b66;
+        }
+
+        /* GRID CARDS */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .card-item {
+            background: #f0f6ff;
+            border: 3px solid #000000;
+            border-radius: 14px;
+            padding: 15px;
+            box-shadow: 4px 4px 0px #000000;
+        }
+
+        .card-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+            color: #0044cc;
+        }
+
+        /* QUIZ YES/NO BUTTONS */
+        .quiz-container {
+            background: #e0edff;
+            border: 3px dashed #0044cc;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        .question-text {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #000000;
+            margin-bottom: 18px;
+        }
+
+        .btn-group-yn {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .btn-yn {
+            flex: 1;
+            max-width: 180px;
+            padding: 14px;
+            border: 3px solid #000000;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000000;
+            transition: all 0.1s;
+        }
+
+        .btn-yes {
+            background: #00a859;
+            color: #ffffff;
+        }
+
+        .btn-no {
+            background: #e53935;
+            color: #ffffff;
+        }
+
+        .btn-yn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
+        }
+
+        .feedback-msg {
+            font-weight: 900;
+            font-size: 1.1rem;
+            min-height: 30px;
+        }
+
+        /* NAVIGATION BAR */
+        .nav-controls {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 18px;
+            background: #ffffff;
+            border: 4px solid #000000;
+            border-radius: 16px;
+            padding: 10px 18px;
+            box-shadow: 6px 6px 0px #000000;
+        }
+
+        .nav-btn {
+            background: #ffcc00;
+            color: #000000;
+            border: 3px solid #000000;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 900;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 3px 3px 0px #000000;
+            user-select: none;
+        }
+
+        .nav-btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .nav-btn:not(:disabled):active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px #000000;
+        }
+
+        .slide-indicator {
+            font-weight: 900;
+            font-size: 1rem;
+            color: #002b66;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="presentation-container">
+
+        <!-- SLIDE 1: INTRO BANDUNG -->
+        <div class="slide active" id="slide-0">
+            <div class="header-box">
+                <span class="header-title">PARIS VAN JAVA 🌿</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge">SLIDE 1 / 8 • INTRODUKSI</span>
+            <div class="slide-body" style="text-align: center;">
+                <p style="font-size: 1.3rem; font-weight: bold; margin-bottom: 12px; color: #000000;">Wilujeng Sumping di Bandung! 💙</p>
+                <p>Bandung diciptakan saat Tuhan sedang tersenyum! Kota sejuk penuh kreativitas, fasyen estetik, jajanan aci legendaris, dan kebanggaan tim Maung Bandung ⚽.</p>
+                <div style="margin-top: 20px; background: #fff8e1; border: 3px dashed #ffcc00; padding: 12px; border-radius: 12px; font-weight: bold; color: #000000;">
+                    👉 Tekan tombol "Lanjut ❯" atau panah kanan keyboard untuk menjelajah slide & kuis!
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 2: PERSIB & BOBOTOH -->
+        <div class="slide" id="slide-1">
+            <div class="header-box">
+                <span class="header-title">⚽ MAUNG BANDUNG</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge" style="background: #0044cc; color: #fff;">SLIDE 2 / 8 • KEBANGGAAN JABAR</span>
+            <div class="slide-body">
+                <p style="font-weight: bold; margin-bottom: 10px; color: #000000;">Sepak Bola dan Jati Diri Warga Bandung:</p>
+                <div class="grid-cards">
+                    <div class="card-item">
+                        <h4>🦁 PERSIB BANDUNG</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Klub kebanggaan berjuluk <strong>Maung Bandung</strong> dengan pangeran biru sebagai warnanya.</p>
+                    </div>
+                    <div class="card-item">
+                        <h4>📢 BOBOTOH</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Sebutan suporter setia yang selalu membirukan Stadion GBLA & Sijalak Harupat!</p>
+                    </div>
+                    <div class="card-item">
+                        <h4>🏟️ SPIRIT BANDUNG</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">"Bagimu Persib Jiwa Raga Kami" — Simbol persatuan warga Jawa Barat.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 3: OLHAN ACI & KULINER -->
+        <div class="slide" id="slide-2">
+            <div class="header-box">
+                <span class="header-title">🍡 SURGA ACI & KULINER</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge" style="background: #ff9800; color: #fff;">SLIDE 3 / 8 • KULINER KHAS</span>
+            <div class="slide-body">
+                <p style="font-weight: bold; margin-bottom: 10px; color: #000000;">Jajanan Olahan Aci Legendaris Khas Bandung:</p>
+                <div class="grid-cards">
+                    <div class="card-item">
+                        <h4>🔴 Cilok, Cimol, Cireng</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Aneka kreasi olahan tepung tapioka/aci dengan bumbu kacang atau bumbu tabur pedas!</p>
+                    </div>
+                    <div class="card-item">
+                        <h4>🍲 Seblak Pedas</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Kerupuk basah kuah kencur pedas nikmat dengan aneka topping lengkap.</p>
+                    </div>
+                    <div class="card-item">
+                        <h4>Batagor & Mie Kocok</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Bakso tahu goreng renyah bumbu kacang & mie kuah kaldu kaki sapi yang gurih.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 4: WISATA ALAM & LANDMARK -->
+        <div class="slide" id="slide-3">
+            <div class="header-box">
+                <span class="header-title">🏛️ SPOT IKONIK</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge" style="background: #00a859; color: #fff;">SLIDE 4 / 8 • DESTINASI</span>
+            <div class="slide-body">
+                <p style="font-weight: bold; margin-bottom: 10px; color: #000000;">Destinasi Terfavorit di Bandung:</p>
+                <div class="grid-cards">
+                    <div class="card-item">
+                        <h4>🍢 Gedung Sate & Asia Afrika</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Pusat sejarah kota dengan arsitektur klasik yang megah dan jalanan estetik.</p>
+                    </div>
+                    <div class="card-item">
+                        <h4>🌲 Lembang & Ciwidey</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Kawasan pegunungan sejuk dengan Kawah Putih, perkebunan teh, & tempat wisata hits.</p>
+                    </div>
+                    <div class="card-item">
+                        <h4>🛍️ Jalan Riau & Braga</h4>
+                        <p style="font-size: 0.95rem; color: #000000;">Surga belanja Factory Outlet & cafe tempat nongkrong syahdu malam hari.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SLIDE 5: QUIZ INTERAKTIF 1 -->
+        <div class="slide" id="slide-4">
+            <div class="header-box">
+                <span class="header-title">❓ QUIZ BANDUNG #1</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge">SLIDE 5 / 8 • KUIS KULINER</span>
+            <div class="quiz-container">
+                <div class="question-text">
+                    Apakah kamu MAU makan Seblak Pedas kuah kencur lengkap pakai ceker dan bakso sore ini di Braga? 🍲
+                </div>
+                <div class="btn-group-yn">
+                    <button class="btn-yn btn-yes" onclick="answerQuiz(0, true)">MAU BANGAT! 🔥</button>
+                    <button class="btn-yn btn-no" onclick="answerQuiz(0, false)">TIDAK MAU 😅</button>
+                </div>
+                <div class="feedback-msg" id="feedback-0"></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 6: QUIZ INTERAKTIF 2 -->
+        <div class="slide" id="slide-5">
+            <div class="header-box">
+                <span class="header-title">❓ QUIZ BANDUNG #2</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge" style="background: #0044cc; color: #fff;">SLIDE 6 / 8 • KUIS PERSIB</span>
+            <div class="quiz-container">
+                <div class="question-text">
+                    Apakah julukan utama bagi tim sepak bola kebanggaan Bandung adalah MAUNG BANDUNG? ⚽
+                </div>
+                <div class="btn-group-yn">
+                    <button class="btn-yn btn-yes" onclick="answerQuiz(1, true)">MAU (BENAR) ✅</button>
+                    <button class="btn-yn btn-no" onclick="answerQuiz(1, false)">TIDAK (SALAH) ❌</button>
+                </div>
+                <div class="feedback-msg" id="feedback-1"></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 7: QUIZ INTERAKTIF 3 -->
+        <div class="slide" id="slide-6">
+            <div class="header-box">
+                <span class="header-title">❓ QUIZ BANDUNG #3</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge" style="background: #00a859; color: #fff;">SLIDE 7 / 8 • KUIS WISATA</span>
+            <div class="quiz-container">
+                <div class="question-text">
+                    Apakah kamu MAU liburan menikmati udara dingin sambil minum teh di kebun teh Ciwidey & Lembang? 🌿
+                </div>
+                <div class="btn-group-yn">
+                    <button class="btn-yn btn-yes" onclick="answerQuiz(2, true)">MAU DONG! 📸</button>
+                    <button class="btn-yn btn-no" onclick="answerQuiz(2, false)">TIDAK DULU 🚶</button>
+                </div>
+                <div class="feedback-msg" id="feedback-2"></div>
+            </div>
+        </div>
+
+        <!-- SLIDE 8: PENUTUP -->
+        <div class="slide" id="slide-7">
+            <div class="header-box">
+                <span class="header-title">💙 HATUR NUHUN</span>
+                <div class="persib-logo-container" title="Persib Bandung">
+                    <div class="persib-stars">★ ★</div>
+                    <div class="persib-shield">
+                        <span class="persib-text">PERSIB</span>
+                    </div>
+                </div>
+            </div>
+            <span class="slide-badge" style="background: #ffcc00;">SLIDE 8 / 8 • CLOSING</span>
+            <div class="slide-body" style="text-align: center;">
+                <p style="font-size: 1.3rem; font-weight: bold; margin-bottom: 12px; color: #000000;">Bandung Selalu Bikin Kangen! 💙</p>
+                <p>Sampai jumpa di kota dengan sejuta kenangan, udara sejuk, dan keramahan warga Pasundan!</p>
+                <div style="margin-top: 20px; font-weight: 900; font-size: 1.2rem; color: #0044cc;">
+                    BAGIMU PERSIB JIWA RAGA KAMI! 💙⚽
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- NAVIGATION CONTROLS -->
+    <div class="nav-controls">
+        <button class="nav-btn" id="prevBtn" onclick="moveSlide(-1)" disabled>❮ Kembali</button>
+        <div class="slide-indicator" id="slideIndicator">1 / 8</div>
+        <button class="nav-btn" id="nextBtn" onclick="moveSlide(1)">Lanjut ❯</button>
+    </div>
+
+    <script>
+        var currentSlide = 0;
+        var totalSlides = 8;
+
+        function updateSlide() {
+            for (var i = 0; i < totalSlides; i++) {
+                var slideEl = document.getElementById('slide-' + i);
+                if (i === currentSlide) {
+                    slideEl.classList.add('active');
+                } else {
+                    slideEl.classList.remove('active');
+                }
+            }
+
+            document.getElementById('slideIndicator').innerText = (currentSlide + 1) + ' / ' + totalSlides;
+            document.getElementById('prevBtn').disabled = (currentSlide === 0);
+            document.getElementById('nextBtn').disabled = (currentSlide === totalSlides - 1);
+        }
+
+        function moveSlide(dir) {
+            var target = currentSlide + dir;
+            if (target >= 0 && target < totalSlides) {
+                currentSlide = target;
+                updateSlide();
+            }
+        }
+
+        // NAVIGASI KEYBOARD
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') moveSlide(1);
+            if (e.key === 'ArrowLeft') moveSlide(-1);
+        });
+
+        // FUNGSI JAWAB KUIS MAU / TIDAK MAU
+        function answerQuiz(quizIdx, isYes) {
+            var fb = document.getElementById('feedback-' + quizIdx);
+            
+            if (quizIdx === 0) { // Quiz Seleb Bandung
+                if (isYes) {
+                    fb.style.color = '#00a859';
+                    fb.innerText = 'Sikat! Rapannnnnnnnnnn! 🔥';
+                } else {
+                    fb.style.color = '#e53935';
+                    fb.innerText = 'Waduh rugi euy! Padahal seblak Bandung rasanya gurih pedas pisan! 😋';
+                }
+            } else if (quizIdx === 1) { // Quiz Persib
+                if (isYes) {
+                    fb.style.color = '#00a859';
+                    fb.innerText = '✅ MUHUN BENER PISAN! Maung Bandung kebanggaan Bobotoh 💯';
+                } else {
+                    fb.style.color = '#e53935';
+                    fb.innerText = '❌ Salah euy! Julukan Persib itu emang Maung Bandung! 😅';
+                }
+            } else if (quizIdx === 2) { // Quiz Kebun Teh
+                if (isYes) {
+                    fb.style.color = '#00a859';
+                    fb.innerText = 'Mantap A/Teteh! Siapin jaket hangat buat healing di kebun teh! 🌿';
+                } else {
+                    fb.style.color = '#e53935';
+                    fb.innerText = 'Sayang banget, padahal pemandangan pegunungan Bandung adem pisan,! 🏔️';
+                }
+            }
+        }
+
+        window.onload = function() {
+            updateSlide();
+        };
+    </script>
+</body>
+</html>
